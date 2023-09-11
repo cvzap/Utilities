@@ -3,6 +3,7 @@ Short scripts that will help aid in the project
 
 Note: You will need to install the dependecies for each of these apps found in the imports. OpenCV being the main one for these to work. Since different configurations and systems can be used, please see the documentation provided by OpenCV to set the desired workspace for yourself. 
 
+Also you will need to set some variables within the files themselves to match your own setup. I have made it obvious where. 
 
 ~captureVideo.py 
 
