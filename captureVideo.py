@@ -9,7 +9,7 @@ import time
 # 
 #####################################################
 
-myPath = 'data/images'  
+myPath = 'data\\images'  
 cameraNo = 1 # Change to zero (0) if this setting doesn't work
 cameraBrightness = 180
 moduleVal = 10  # SAVE EVERY NTH FRAME TO AVOID REPETITION
@@ -69,7 +69,7 @@ while True:
 
             # write to current folder with unique name
             # fix this if images are not going to where you expect
-            cv2.imwrite(myPath + str(countFolder) + "\\"
+            cv2.imwrite(myPath + "\\" + str(countFolder) + "\\"
                         + str(countSave) + "_" + str(int(blur)) + "_" + str(nowTime) + ".png", img)
             countSave += 1
         count += 1
