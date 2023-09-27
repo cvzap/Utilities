@@ -41,7 +41,7 @@ def saveDataFunc():
     countFolder = 0
     while os.path.exists(myPath + str(countFolder)):
         countFolder += 1
-    os.makedirs(myPath + str(countFolder))
+    #os.makedirs(myPath + str(countFolder))
 
 
 if saveData: saveDataFunc()
@@ -69,7 +69,7 @@ while True:
 
             # write to current folder with unique name
             # fix this if images are not going to where you expect
-            cv2.imwrite(myPath + "\\" + str(countFolder) + "\\"
+            cv2.imwrite(myPath
                         + str(countSave) + "_" + str(int(blur)) + "_" + str(nowTime) + ".png", img)
             countSave += 1
         count += 1
