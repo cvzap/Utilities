@@ -9,7 +9,7 @@ import time
 # 
 #####################################################
 
-myPath = 'data\\images'  
+myPath = 'data\\images\\'  
 cameraNo = 1 # Change to zero (0) if this setting doesn't work
 cameraBrightness = 180
 moduleVal = 10  # SAVE EVERY NTH FRAME TO AVOID REPETITION
