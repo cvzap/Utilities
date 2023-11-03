@@ -1,0 +1,119 @@
+#
+# Author: Craig R Harrell
+# Date: 11/3/2023
+#
+# Purpose: This script will take your videos and process them through
+#  ffmpeg for you. It will then process the raw images by removing
+#  frames and sort them into manageable sets for annotation
+#
+
+###############################################################
+# Important! Read before use.
+###############################################################
+# This script will take your videos and process them through
+# ffmpeg for you. It will then process the raw images by removing
+# frames and sort them into manageable sets for annotation
+#
+# It is set up to work with the following folder structure:
+# [bug name]
+#    |
+#     videos ( where you put your videos)
+#     raw (where the images processed by ffmpeg go)
+#     images (where the filtered raw images go)
+#       |
+#        set_% (where each cluster of images will end up)
+#
+# Change only the settings that have a change notation once the script
+# is done running you should have all your images in folders and each folder
+# should contain a set of 100. There will be some outliers that you can just manually
+# move into whatever set you want. This script should make the entire process of getting
+# the images ready for easy annotation...well easy.
+#
+# Example folder structures are in the folder variables now and need to be changed
+# to match your setup.
+#
+# Note: Rename your videos like this: mantis_1.mpg/mov/whatever extension it is this
+# will ensure that the image names match the video they came from and are easily recognizable
+# to others, before running this script.
+#
+# Note: you will need to update this for each new set of bugs, while you could just put them all
+# into one folder and process them all, this script won't sort based on name, so it would be
+# better to keep the bugs separated for ease of identifying sets.
+#
+# IMPORTANT: if you have any questions about its use ask before using it.
+
+import os
+import subprocess
+
+####################################################################
+# Change these to match your system make sure to add trailing slash
+####################################################################
+# change this to the folder you have your videos in
+videos = "/Volumes/Projects/new bugs/prey mantis/videos/"
+
+# change this to the folder where the pictures will go when converted from video
+source = "/Volumes/Projects/new bugs/prey mantis/raw/"
+
+# change this to the folder you want the images to go after sorting
+# should be different from the raw images
+imageFolder = "/Volumes/Projects/new bugs/prey mantis/images/"
+
+# change path to ffmpeg if using Linus/Unix based system
+# if you installed it on Windows I think it is a global so just
+# put 'ffmpeg' in this.
+ffmpeg = "/Volumes/Projects/new bugs/ffmpeg"
+
+##############################################################
+# !!!!!!!!!!!! IMPORTANT !!!!!!!!!!!!!!!!!!!!!
+# Don't change anything below unless you need/want to, but if
+# you do, please make sure you understand the change you are
+# making.
+##############################################################
+# make sure our source path exists if not make it
+if not os.path.isdir(source):
+    os.mkdir(source)
+
+# make sure our image path exists
+if not os.path.isdir(imageFolder):
+    os.mkdir(imageFolder)
+
+# convert videos to images
+for file in sorted(os.listdir(videos)):
+    fileName = os.path.splitext(file)[0]
+    process = fileName + "_%04d.png"
+    subprocess.run([ffmpeg, '-i', os.path.join(videos, file), os.path.join(source, process)])
+
+# now filter out images from our raw to get a good assortment
+for d, file in enumerate(sorted(os.listdir(source))):
+    if d % 4 != 0:
+        currentLocation = os.path.join(source, file)
+        newLocation = os.path.join(imageFolder, file)
+        os.replace(currentLocation, newLocation)
+
+
+# figure out how many images we have, so we can break them up later
+imgCount = 0
+for d, file in enumerate(sorted(os.listdir(imageFolder))):
+    imgCount = d
+
+# break our images into groups of 100
+# note we don't expect an even split
+setCount = imgCount // 100
+
+# moves our images into sets for easier annotation each set will contain 100 images
+for i in range(1, setCount):
+    destination = imageFolder + "set_" + str(i) + "/"
+
+    # Make destination if it does not exist
+    if not os.path.isdir(destination):
+        os.mkdir(destination)
+
+    for d, file in enumerate(sorted(os.listdir(imageFolder))):
+        if d < 100:  # sort our images into sets of 100
+            # only move files not directories
+            if os.path.isfile(os.path.join(imageFolder, file)):
+                currentLocationOfFile = os.path.join(imageFolder, file)
+                newLocationForFile = os.path.join(destination, file)
+                os.replace(currentLocationOfFile, newLocationForFile)
+        if d > 100:  # we got a hundred start over with new set
+            break
