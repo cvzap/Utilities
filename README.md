@@ -21,3 +21,7 @@ Provides a quick and dirty renaming tool for large directories to convert file n
 ~cropImage.cpp
 
 Provides a user friendly interface to crop images that are too large to run through training.
+
+~ImgAnnotationSetup.py
+
+Provides a user friendly way to go from video to filtered and organized image files for easier annotation.
